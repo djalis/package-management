@@ -1,13 +1,20 @@
+https://www.linuxshelltips.com/install-apache-tomcat-rhel-8/    or https://linuxconcept.com/how-to-install-tomcat-9-on-rhel-7-red-hat-enterprise-linux/
+
 #Make sure your RHEL 8 system is up-to-date for the operating system’s optimal performance.
 sudo dnf update -y  
 sudo yum install java-11-openjdk   [Install Java 11]
 java -version
+
 #To install Tomcat, we will need Curl or Wget for the download of Apache Tomcat-related packages.
 sudo dnf install curl wget tar -y
+
 # Next, you need to create a regular (sudoer) Linux user who should be able to run the Tomcat service.
  sudo useradd -r tomcat
-#Now head over to Apache Tomcat’s website to download the latest version via the following curl command.
+ 
+#
+Now head over to Apache Tomcat’s website to download the latest version via the following curl command.
 wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.0.23/bin/apache-tomcat-10.0.23.tar.gz
+
 # We should now be able to extract our downloaded file using the tar command and move the extracted files to the /usr/local directory with appropriate permissions.
  tar -zxvf apache-tomcat-*.tar.gz
  mv apache-tomcat-10.0.22 /usr/local/tomcat10
@@ -16,16 +23,20 @@ wget https://dlcdn.apache.org/tomcat/tomcat-10/v10.0.23/bin/apache-tomcat-10.0.2
  # Step 3: Creating Apache Tomcat’s Systemd File
  alternatives --list | grep ^java
 sudo nano /etc/systemd/system/tomcat.service 
+
 # You might need to disable SELinux in case it prevents tomcat from starting.
 sudo setenforce 0
 sudo sed -i 's/ELINUX=enforcing/ELINUX=disabled/g' /etc/selinux/config
+
 #Reload system daemon to acknowledge changes.
 sudo systemctl daemon-reload
+
 #Now start, enable and verify the status of the Apache Tomcat service.
 sudo systemctl start tomcat
 sudo systemctl enable tomcat
 sudo systemctl status tomcat
-#Since Apache Tomcat uses port 8080, make sure you allow it on your system firewall.
+
+# Since Apache Tomcat uses port 8080, make sure you allow it on your system firewall.
 sudo firewall-cmd --permanent --add-port=8080/tcp
 sudo firewall-cmd --reload
 
